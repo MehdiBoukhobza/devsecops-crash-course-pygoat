@@ -27,11 +27,15 @@ jobs:
     - name: Run Bandit Security Scan (HTML and JSON)
       run: |
         mkdir -p bandit-reports
-        bandit -r . -f html -o bandit-reports/bandit-report.html || echo "Bandit HTML scan completed with findings."
-        bandit -r . -f json -o bandit-reports/bandit-report.json || echo "Bandit JSON scan completed with findings."
+        # Exclude unnecessary files and directories
+        EXCLUDE_PATHS="migrations,static,templates,requirements.txt,runtime.txt,.gitignore,gh-md-toc,test.log,README.md,installer.sh,uninstaller.sh,setup.py"
+        bandit -r . --exclude $EXCLUDE_PATHS -f html -o bandit-reports/bandit-report.html || echo "Bandit HTML scan completed with findings."
+        bandit -r . --exclude $EXCLUDE_PATHS -f json -o bandit-reports/bandit-report.json || echo "Bandit JSON scan completed with findings."
 
     - name: Upload Bandit Reports
       uses: actions/upload-artifact@v3
       with:
         name: bandit-reports
         path: bandit-reports/
+
+
