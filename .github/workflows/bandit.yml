@@ -24,13 +24,14 @@ jobs:
     - name: Install Bandit
       run: pip install bandit
 
-    - name: Run Bandit Security Scan
+    - name: Run Bandit Security Scan (HTML and JSON)
       run: |
         mkdir -p bandit-reports
-        bandit -r . -f html -o bandit-reports/bandit-report.html || echo "Bandit scan completed with findings."
+        bandit -r . -f html -o bandit-reports/bandit-report.html || echo "Bandit HTML scan completed with findings."
+        bandit -r . -f json -o bandit-reports/bandit-report.json || echo "Bandit JSON scan completed with findings."
 
-    - name: Upload Bandit Report
+    - name: Upload Bandit Reports
       uses: actions/upload-artifact@v3
       with:
-        name: bandit-report
-        path: bandit-reports/bandit-report.html
+        name: bandit-reports
+        path: bandit-reports/
